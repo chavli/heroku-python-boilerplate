@@ -106,6 +106,7 @@ alembic upgrade head
 ### Testing Locally
 ```
 heroku local web
+- OR -
 python rundebug.py
 ```
 
