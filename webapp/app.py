@@ -4,6 +4,7 @@ from flask import Flask, request, jsonify, g
 from flask_restful import Resource, Api
 from .api.endpoints import demo_blueprint
 from .core.utils.responsejson import ErrorResponseJson
+from .core.utils.logger import Logger
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
@@ -18,9 +19,13 @@ def before_request():
 @app.after_request
 def after_request(response):
     """ called after every request """
-    delta = time.time() - g.start_time
-    print(delta)
 
+    # log the endpoint hit and any errors
+    delta = int((time.time() - g.start_time) * 1000)
+    username = request.authorization.username if request.authorization else None
+    err_msg = response.get_data(as_text=True) if response.status_code // 100 >= 4 else None
+    Logger.endpoint_hit(g.start_time, delta, request.base_url, username, request.method,
+                        response.status_code, err_msg)
     return response
 
 @app.errorhandler(401)

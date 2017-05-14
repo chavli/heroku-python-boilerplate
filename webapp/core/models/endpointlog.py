@@ -13,7 +13,7 @@ class EndpointLog(Base):
     __table_args__ = ()
 
     id = Column(pgsql.INTEGER, Sequence("endpoint_log_id_seq"), primary_key=True)
-    start_epoch_utc = Column(pgsql.NUMERIC(14, 3), nullable=False)
+    start_utc = Column(pgsql.TIMESTAMP(timezone=False), nullable=False)
     duration_ms = Column(pgsql.INTEGER, nullable=False)
     endpoint = Column(pgsql.TEXT)
     username = Column(pgsql.TEXT)
@@ -21,9 +21,9 @@ class EndpointLog(Base):
     http_code = Column(pgsql.TEXT)
     error_message = Column(pgsql.TEXT)
 
-    def __init__(self, start_epoch_utc: float, duration_ms: int, endpoint: str,
+    def __init__(self, start_utc: datetime.datetime, duration_ms: int, endpoint: str,
                  username: str, method: str, http_code: int, error_message: str=None):
-        self.start_epoch_utc = start_epoch_utc
+        self.start_utc = str(start_utc)
         self.duration_ms = duration_ms
         self.endpoint = endpoint
         self.username = username
