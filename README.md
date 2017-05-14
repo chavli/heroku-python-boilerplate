@@ -104,6 +104,8 @@ alembic upgrade head
 ```
 
 ### Testing Locally
+Running either of these commands will start a local server on `localhost:5000`. If everything works then going to
+`localhost:5000/api/hello` will return `{"hello": "world"}`
 ```
 heroku local web
 - OR -
