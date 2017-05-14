@@ -1,40 +1,49 @@
 # Introduction
 You scream, I scream, we all scream for REST API's! Whether for fun or for work a REST API exposes
-backend resources to frontend clients.
+backend resources to frontend clients. If you have even a little development experience then you can
+have a working API **deployed in minutes!**
 
-I've always wanted to open up the framework I use to create APIs for two reasons: first, it's a pain to have
-to write basic functionality over and over when creating multiple APIs, and secondly to serve as a
-learning resouce for others. Therefore, what I have here is as much for me as it is for all of you:
-a quick way to get your API up and running so you can build your app and not worry about the overhead of setting
-up really basic code components.
+# Motivation and Purpose
+I've noticed over the years of working on backend code that there aren't many meaningful examples
+of backend code that illustrates how everything works together.Of course, there are countless code pieces
+ showing discrete parts of a functional backend and even small examples of a working
+ "hello world" endpoint but it's still up to the developer to tie these pieces together, and
+ configure, anything meaningful. Not everything is hopeless, however. Companies are making it easier to setup your own server [references needed] and creating the tools
+ to easily deploy live code but the question still remains _what code do you deploy?_
 
-The code here is the result of my experience working on REST API's over several years both professionally
-and for fun. It's evolved over the years and I feel it's at a good place to share. I expect to it change
-more in the future.
+This is the question I want to try to answer. I think this disconnect contributes to an environment
+that makes it hard to learn backend development and encourages a misconception that backend code is
+"hard" or "confusing".
+
+I want to achieve a few things by sharing this code:
+1. create a non-trivial, but still minimal, codebase illustrating some core concepts of REST API development and tieing them together
+2. demonstrate the process of deploying code to a live environment, in this case to Heroku.
+3. save myself, and others, time when it comes to setting up a backend for hackathons and small projects.
+
 
 # Requirements
 * Python 3.6.1+
-* `virtualenv` and `pip`: managing local development environment
-* [Heroku Toolbelt](https://devcenter.heroku.com/articles/heroku-cli): Heroku CLI
+* `virtualenv` and `pip`
+* [Heroku Toolbelt](https://devcenter.heroku.com/articles/heroku-cli)
 
 # Optional
 - [Postman](https://www.getpostman.com/) -- Cool tool for testing REST API's
 
 # Included Features:
-The code as is comes with these features already built in:
+The code as-is comes with these features already built in:
 * pre-configured to be deployed to a Heroku app with a PostgreSQL database
 * pre-defined sample endpoints and account management endpoints
 * application logic for handling user account creation and sessions
-* predefined `SQLAlchemy` model classes for user accounts, user sessions, and logging
+* pre-defined `SQLAlchemy` model classes for user accounts, user sessions, and logging
 * function decorators for endpoint authentication and JSON validation
-* JWT generation / verification
-* hash generation / verification using `pbkdf2_sha256`
 * `RequestParser`: a class that makes it easy to define, enforce, and parse endpoint parameters
 * `ResponseJson`: a class that standardizes the JSON format of endpoint responses
-* `SQLAlchemy` session management
-* a light wrapper around `psycopg2` for handling custom queries and connection management
 * a `Logger` class for writing application logs and endpoint hit logs to a pre-defined table
-* `Alembic` pre-configured to initlaize and upgrade database schemas
+* `SQLAlchemy` database session management
+* a light wrapper around `psycopg2` for handling custom queries and connection management
+* `Alembic` pre-configured to initialize and upgrade database schemas
+* JWT generation / verification
+* hash generation / verification using `pbkdf2_sha256`
 
 
 # Setup Instructions
