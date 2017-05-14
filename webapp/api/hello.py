@@ -20,7 +20,7 @@ class EchoWorld(Resource):
         parser = RequestParser()
         parser.add_argument("message", type=str, required=True, location="args")
         parser.add_argument("number", type=int, required=False, location="args")
-        parser.add_argument("vote", type=str, require=False, choices=("red", "blue", "green"),
+        parser.add_argument("vote", type=str, required=False, choices=("red", "blue", "green"),
                 location="args")
         args = parser.parse_args()
 
