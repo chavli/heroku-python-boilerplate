@@ -77,6 +77,8 @@ celerybeat-schedule
 
 # dotenv
 .env
+.bash_env
+*.*.env
 
 # virtualenv
 venv/
@@ -89,5 +91,5 @@ ENV/
 .ropeproject
 
 # temp files
-.swp
-.swo
+*.swp
+*.swo
