@@ -1,5 +1,6 @@
 import os
 import time
+import datetime
 from flask import Flask, request, jsonify, g
 from flask_restful import Resource, Api
 from .api.endpoints import demo_blueprint
@@ -22,9 +23,10 @@ def after_request(response):
 
     # log the endpoint hit and any errors
     delta = int((time.time() - g.start_time) * 1000)
+    start_utc = datetime.datetime.utcfromtimestamp(g.start_time)
     username = request.authorization.username if request.authorization else None
     err_msg = response.get_data(as_text=True) if response.status_code // 100 >= 4 else None
-    Logger.endpoint_hit(g.start_time, delta, request.base_url, username, request.method,
+    Logger.endpoint_hit(start_utc, delta, request.base_url, username, request.method,
                         response.status_code, err_msg)
     return response
 
