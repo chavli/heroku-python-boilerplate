@@ -12,19 +12,91 @@ The code here is the result of my experience working on REST API's over several 
 and for fun. It's evolved over the years and I feel it's at a good place to share. I expect to it change
 more in the future.
 
+# Requirements
+* Python 3.6.1+
+* `virtualenv` and `pip`: managing local development environment
+* [Heroku Toolbelt](https://devcenter.heroku.com/articles/heroku-cli): Heroku CLI
 
-# The Details
-This is a Python backend built using Flask-Restful, Waitress, and Alembic meant to be deployed to Heroku with
-a PostgreSQL database.
+# Optional
+- [Postman](https://www.getpostman.com/) -- Cool tool for testing REST API's
 
 # Included Features:
-In my experience writing API's there is always a set of core functionality that I end up re-writing or
-copying from previous projects. These functions include:
+The code as is comes with these features already built in:
+* pre-configured to be deployed to a Heroku app with a PostgreSQL database
+* pre-defined sample endpoints and account management endpoints
+* application logic for handling user account creation and sessions
+* predefined `SQLAlchemy` model classes for user accounts, user sessions, and logging
+* function decorators for endpoint authentication and JSON validation
+* JWT generation / verification
+* hash generation / verification using `pbkdf2_sha256`
+* `RequestParser`: a class that makes it easy to define, enforce, and parse endpoint parameters
+* `ResponseJson`: a class that standardizes the JSON format of endpoint responses
+* `SQLAlchemy` session management
+* a light wrapper around `psycopg2` for handling custom queries and connection management
+* a `Logger` class for writing application logs and endpoint hit logs to a pre-defined table
+* `Alembic` pre-configured to initlaize and upgrade database schemas
 
-1. a consistent and safe way to execute queries against a database
-2. a consistent way to maintain and update your database schema
-4. endpoint authentication
+
+# Setup Instructions
+
+```
+git clone https://github.com/chavli/heroku-python-skeleton.git .
+```
+
+## Heroku Setup
+```{bash}
+heroku login
+heroku apps:create your_app_name
+heroku config:set JWT_SECRET="secret value!" --app your_app_name
+heroku config:set JWT_ISS="secret value!" --app your_app_name
+git remote add heroku git@heroku.com:your_app_name.git
+heroku addons:create heroku-postgresql --app your_app_name
+```
+
+## Local Environment
+```{bash}
+virtualenv venv -p /usr/bin/python3.6
+source venv/bin/activate
+pip install -r requirements.txt
+
+heroku config --app your_app_name --shell > .env
+cp .env .bash_env
+```
+
+## Initializing the Database (optional)
+```
+source .bash_env
+alembic upgrade head
+```
+
+## Testing Locally
+```
+heroku local web
+python rundebug.py
+```
+
+# Core Libraries
+* [Flask](http://flask.pocoo.org/)
+* [Flask-Restful](https://flask-restful.readthedocs.io/en/0.3.5/)
+* [Waitress](http://docs.pylonsproject.org/projects/waitress/en/latest/)
+* [SQLAlchemy](https://www.sqlalchemy.org/)
+* [Alembic](http://alembic.zzzcomputing.com/en/latest/)
+* [psycopg2](http://initd.org/psycopg/)
+
+# Out-of-the-box Endpoints
+
+- `GET /api/hello`
+- `GET /api/echo`
+- `GET /api/protectedhello`
+- `POST /api/account`
+- `GET /api/session`
+- `DELETE /api/session`
 
 
-# heroku-python-skeleton
-All the basic code to start a Python Heroku app with a PostgreSQL database.
+# Advanced
+
+## Updating the Schema
+```
+alembic revision --autogenerate -m "update details"
+alembic upgrade head
+```
