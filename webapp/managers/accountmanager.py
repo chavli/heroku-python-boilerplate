@@ -23,7 +23,7 @@ class AccountManager():
         except Exception as e:
             traceback.print_exc()
             raise(e)
-    
+
 
     def create(self, email: str, password: str) -> ResponseJson:
         """ create a new user account """
@@ -36,7 +36,7 @@ class AccountManager():
             if not account:
                 # woohoo a new account!
 
-                h_password = generate_hash(password) 
+                h_password = generate_hash(password)
                 account = Account(email, h_password)
                 with dbsession() as session:
                     session.add(account)
@@ -51,7 +51,7 @@ class AccountManager():
                 return ResponseJson(payload)
 
             else:
-                return ErrorResponseJson("email already taken")
+                return ErrorResponseJson("username already taken")
 
         except Exception as e:
             traceback.print_exc()
@@ -83,3 +83,17 @@ class AccountManager():
         except Exception as e:
             traceback.print_exc()
             raise(e)
+
+
+    def verify_account(self, email: str, password: str) -> bool:
+        """ check if the given credentials are valid """
+        verified = False
+        with dbsession() as session:
+            account = session.query(Account)\
+                .filter(Account.email == email)\
+                .with_entities(Account.secret)\
+                .first()
+        if account:
+            verified = verify_hash(password, account.secret)
+
+        return verified
