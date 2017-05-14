@@ -47,47 +47,41 @@ def no_authorization(func):
 def require_token(func):
     """ verifies the uuid/token combo of the given account. account type can be:
         customer, fox, merchant """
-    def decorator(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            if request.authorization:
-                uuid = request.authorization.username
-                token = request.authorization.password
-                try:
-                    manager = SessionManager()
-                    valid = manager.verify(uuid, token)
-                    if not valid:
-                        return UnauthorizedResponseJson().make_response()
-                except Exception as e:
-                    traceback.print_exc()
-                    return ExceptionResponseJson("unable to validate credentials", e).make_response()
-            else:
-                return UnauthorizedResponseJson().make_response()
-            return func(*args, **kwargs)
-        return wrapper
+    @wraps(func)
+    def decorator(*args, **kwargs):
+        if request.authorization:
+            uuid = request.authorization.username
+            token = request.authorization.password
+            try:
+                manager = SessionManager()
+                valid = manager.verify(uuid, token)
+                if not valid:
+                    return UnauthorizedResponseJson().make_response()
+            except Exception as e:
+                traceback.print_exc()
+                return ExceptionResponseJson("unable to validate credentials", e).make_response()
+        else:
+            return UnauthorizedResponseJson().make_response()
+        return func(*args, **kwargs)
     return decorator
 
 
 def require_password(func):
     """ verifies the given username/password combo """
-    def decorator(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            if request.authorization:
-                username = request.authorization.username
-                password = request.authorization.password
-                try:
-                    manager = AccountManager()
-                    valid = manager.verify_account(username, password)
-                    if not valid:
-                        return UnauthorizedResponseJson().make_response()
-                except Exception as e:
-                    traceback.print_exc()
-                    return ExceptionResponseJson("unable to validate credentials", e).make_response()
-            else:
-                return UnauthorizedResponseJson().make_response()
-            return func(*args, **kwargs)
-        return wrapper
+    @wraps(func)
+    def decorator(*args, **kwargs):
+        if request.authorization:
+            username = request.authorization.username
+            password = request.authorization.password
+            try:
+                manager = AccountManager()
+                valid = manager.verify_account(username, password)
+                if not valid:
+                    return UnauthorizedResponseJson().make_response()
+            except Exception as e:
+                traceback.print_exc()
+                return ExceptionResponseJson("unable to validate credentials", e).make_response()
+        else:
+            return UnauthorizedResponseJson().make_response()
+        return func(*args, **kwargs)
     return decorator
-
-
