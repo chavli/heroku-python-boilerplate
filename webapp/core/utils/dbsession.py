@@ -6,19 +6,37 @@
     http://stackoverflow.com/questions/12223335/sqlalchemy-creating-vs-reusing-a-session
     http://stackoverflow.com/questions/5544774/whats-the-recommended-scoped-session-usage-pattern-in-a-multithreaded-sqlalchem
 """
-from . import Session
+from . import create_read_session, create_session
 from contextlib import contextmanager
-from sqlalchemy.orm import scoped_session
 
 
 @contextmanager
 def dbsession():
+    session = None
     try:
-        session = scoped_session(Session)
+        session = create_session(autocommit=False, autoflush=False, expire_on_commit=True)
+        yield session
+        session.commit()
+    except Exception as exc:
+        if session:
+            session.rollback()
+        raise(exc)
+    finally:
+        if session:
+            session.close()
+
+
+@contextmanager
+def read_dbsession():
+    session = None
+    try:
+        session = create_read_session(autocommit=False, autoflush=False, expire_on_commit=False)
         yield session
         session.commit()
     except Exception as e:
-        session.rollback()
+        if session:
+            session.rollback()
         raise(e)
     finally:
-        session.close()
+        if session:
+            session.close()

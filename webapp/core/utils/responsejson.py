@@ -12,7 +12,7 @@ class ResponseJson():
         """ define a custom JSON response and return code """
 
         # this code looks weird but its to properly handle data types that can't be handled
-        # by the standard flask jsonify method (.. Decimals). so we use simplejson to dump the
+        # by the standard flask jsonify method (e.g. Decimals). so we use simplejson to dump the
         # raw json to a string (simplejson converts decimals to strings) and then load it
         # back to json for flask to take care of later
         self.data = json.loads(json.dumps(data))
@@ -40,8 +40,19 @@ class ResponseJson():
     def make_response(self):
         return self.__data, self.__code
 
-    def get_response(self):
-        return self.__data, self.__code
+
+class DeprecatedResponseJson(ResponseJson):
+    """ return an error message telling the client they called a deprecated API """
+
+    def __init__(self):
+        super().__init__({"error": "deprecated"}, 400)
+
+
+class UnimplementedResponseJson(ResponseJson):
+    """ return an error message indicating endpoint is not implemented """
+
+    def __init__(self):
+        super().__init__({"exception": "unimplemented"}, 501)
 
 
 class ExceptionResponseJson(ResponseJson):
@@ -66,7 +77,7 @@ class UnauthorizedResponseJson(ResponseJson):
         data = {"error": "invalid credentials"}
         super().__init__(data, 401)
 
-    def get_response(self):
+    def make_response(self):
         """ override parent impl to include some special header info """
         return self.data, self.return_code, {'WWW-Authenticate': 'Basic realm="Login Required"'}
 
@@ -78,7 +89,7 @@ class UnauthorizedGuestResponseJson(ResponseJson):
         data = {"error": "guest session expired"}
         super().__init__(data, 406)
 
-    def get_response(self):
+    def make_response(self):
         return self.data, self.return_code, {'WWW-Authenticate': 'Basic realm="Login Required"'}
 
 

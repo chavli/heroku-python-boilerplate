@@ -3,8 +3,8 @@ import psycopg2.extras
 import psycopg2.pool
 import os
 import time
-import warnings
 import traceback as tb
+from io import StringIO
 
 
 class PostgreSQLConn:
@@ -19,7 +19,7 @@ class PostgreSQLConn:
 
         isolation_level = self.isolation_opts.get(isolation, psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
         try:
-            if dbname == "fetchy-pgsql":
+            if dbname == "YOUR_DATABASE_NAME":
                 self.__conn = self.__pool.getconn()
                 self.__conn.set_isolation_level(isolation_level)
             else:
@@ -84,7 +84,7 @@ class PostgreSQLConn:
 
         returns the number of rows updated
         """
-        if not self.__conn or not row:
+        if not self.__conn:
             raise psycopg2.InterfaceError("null connection")
 
         try:

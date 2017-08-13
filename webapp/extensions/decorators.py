@@ -24,6 +24,18 @@ def validate_json(func):
     return wrapper
 
 
+def validate_jpeg_binary(func):
+    """ checks the mimetype and the binary data to ensure it's a JPEG """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if request.content_type != "image/jpeg":
+            return ErrorResponseJson("invalid content type: {}".format(request.content_type)).make_response()
+        if imghdr.test_jpeg(request.data, None) != "jpeg":
+            return ErrorResponseJson("invalid jpeg data").make_response()
+        return func(*args, **kwargs)
+    return wrapper
+
+
 def require_auth_header(func):
     """ no auth check is performed but the auth headers are still required. auth check
     is performed by a service other than ourselves """

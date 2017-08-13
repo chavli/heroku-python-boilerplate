@@ -12,12 +12,14 @@ from ..models import Base
 class Account(Base):
     __tablename__ = "user_account"
 
-    id = Column(pgsql.INTEGER, Sequence("user_account_id_seq"), primary_key=True, nullable=False)
+    _ID_SEQ = Sequence("user_account_id_seq")
+    id = Column(pgsql.INTEGER, _ID_SEQ, server_default=_ID_SEQ.next_value(), primary_key=True,
+                nullable=False)
     user_id = Column(pgsql.TEXT)
     email = Column(pgsql.TEXT)
     secret = Column(pgsql.TEXT)
-    creation_utc = Column(pgsql.TIMESTAMP, server_default=func.now())
-    last_updated_utc = Column(pgsql.TIMESTAMP, server_default=func.now())
+    creation_utc = Column(pgsql.TIMESTAMP(timezone=False), server_default=func.now())
+    last_updated_utc = Column(pgsql.TIMESTAMP(timezone=False), server_default=func.now())
 
 
     def __init__(self, email: str, secret: str):

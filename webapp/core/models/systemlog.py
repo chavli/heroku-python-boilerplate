@@ -40,7 +40,9 @@ class SystemLog(Base):
     __tablename__ = "system_log"
     __table_args__ = ()
 
-    id = Column(pgsql.INTEGER, Sequence("system_log_id_seq"), primary_key=True)
+    _ID_SEQ = Sequence("system_log_id_seq")
+    id = Column(pgsql.INTEGER, _ID_SEQ, server_default=_ID_SEQ.next_value(), primary_key=True,
+                nullable=False)
     event_utc = Column(pgsql.TIMESTAMP(timezone=False), server_default=func.now(), nullable=False)
     level = Column(pgsql.TEXT)
     message = Column(pgsql.TEXT)

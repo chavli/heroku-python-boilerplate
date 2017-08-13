@@ -15,10 +15,19 @@ class AutoNamedEnum(Enum):
     def describe(self):
         return self.name, self.value
 
+    @property
+    def description(self) -> str:
+        """ return the ENUM value description """
+        return self.desc
+
+    @description.setter
+    def description(self, desc: str):
+        """ add a description for an ENUM value. not related to describe() """
+        self.desc = desc
+
     @classmethod
     def names(cls):
-        return set([name for name, value in cls.__members__.items()])
-
+        return set(name for name, value in cls.__members__.items())
 
     @classmethod
     def get(cls, name: str):
