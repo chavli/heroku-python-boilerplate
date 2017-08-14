@@ -2,6 +2,7 @@
     custom function decorators
 """
 import traceback
+import imghdr
 from werkzeug.exceptions import BadRequest
 from functools import wraps
 from flask import request, Response

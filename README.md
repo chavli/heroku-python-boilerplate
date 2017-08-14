@@ -37,23 +37,26 @@ I want to achieve a few things by sharing this code:
 
 ## Included Features:
 The code as-is comes with these features already built in:
-* pre-configured to be deployed to a Heroku app with a PostgreSQL database
-* pre-defined sample endpoints and account management endpoints
-* application logic for handling user account creation and sessions
-* pre-defined `SQLAlchemy` model classes for user accounts, user sessions, and logging
-* function decorators for endpoint authentication and JSON validation
-* `RequestParser`: a class that makes it easy to define, enforce, and parse endpoint parameters
-* `ResponseJson`: a class that standardizes the JSON format of endpoint responses
-* a `Logger` class for writing application logs and endpoint hit logs to a pre-defined table
-* `SQLAlchemy` database session management
-* a light wrapper around `psycopg2` for handling custom queries and connection management
-* `Alembic` pre-configured to initialize and upgrade database schemas
-* JWT generation / verification
-* hash generation / verification using `pbkdf2_sha256` (storing password)
-
+- General
+    * pre-configured to be deployed to a Heroku app with a PostgreSQL database
+    * pre-defined sample endpoints and account management endpoints
+    * application logic for handling user account creation and sessions
+- Utilities
+    * `RequestParser`: a class that makes it easy to define, enforce, and parse endpoint parameters
+    * `ResponseJson`: a class that standardizes the JSON format of endpoint responses
+    * a `Logger` class for writing application logs and endpoint hit logs to a pre-defined table
+- Database
+    * `Alembic` pre-configured to initialize and upgrade database schemas
+    * pre-defined `SQLAlchemy` model classes for user accounts, user sessions, and logging
+    * `SQLAlchemy` database session management
+    * a light wrapper around `psycopg2` for handling custom queries and connection management
+- Authentication and Security
+    * function decorators for endpoint authentication and JSON validation
+    * AES encrypt / decrypt
+    * hash generation / verification using `pbkdf2_sha256` (storing password)
+    * JWT generation / verification
 
 ## Setup Instructions
-
 
 ### Heroku Setup
 You can do all this through the Heroku dashboard but it's quicker to do it all through
